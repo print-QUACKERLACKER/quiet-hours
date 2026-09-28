@@ -16,9 +16,11 @@ st.set_page_config(page_title="Quiet Hours", page_icon="🕯️", layout="center
 #
 # Debts, openly: George Orwell's NINETEEN EIGHTY-FOUR (the total ledger, the
 # interrogation that wants a word rather than a fact, the Quiet Room, the
-# colleague informed on by his own wife) and Franz Kafka's THE METAMORPHOSIS
+# colleague informed on by his own wife); Franz Kafka's THE METAMORPHOSIS
 # (the voice going first, the morning the body stops being yours, the iron
-# grown over in a back that cannot reach it, the sweeping-out afterward).
+# grown over in a back that cannot reach it, the sweeping-out afterward); and
+# Fyodor Dostoevsky's NOTES FROM UNDERGROUND (self-cross-examination and the
+# need to make a defense even when nobody has accused you).
 # ----------------------------------------------------------------------------
 
 INITIAL_STATS = {"harthur": 0, "pull": 0, "suspicion": 0, "change": 1, "proof": 0}
@@ -91,6 +93,8 @@ def fresh_run():
     st.session_state.stats = dict(INITIAL_STATS)
     st.session_state.flags = set()
     st.session_state.log = []
+    st.session_state.decision_checkpoints = []
+    st.session_state.page = 0
 
 
 if "started" not in st.session_state:
@@ -106,6 +110,13 @@ if "journal_new" not in st.session_state:
     st.session_state.journal_new = set()
 if "journal_show_new" not in st.session_state:
     st.session_state.journal_show_new = set()
+if "journal_page" not in st.session_state:
+    st.session_state.journal_page = 0
+if "decision_checkpoints" not in st.session_state:
+    st.session_state.decision_checkpoints = []
+# One paragraph to a page. This is the page we are on.
+if "page" not in st.session_state:
+    st.session_state.page = 0
 if "scene" not in st.session_state:
     fresh_run()
 
@@ -833,14 +844,15 @@ SCENES = {
             ("n", "You wake before the bell in a wet bed."),
             ("n", "Your first thought is the ordinary humiliating one and it lasts about a second and a half, which is how long it takes to get your hand round to your back and bring it out in front of your face in the grey light."),
             ("n", "It is not sweat. It is dark and thin and slightly thick between the fingers, and it smells, unmistakably, of almonds."),
-            ("n", "Something along your spine has opened in the night and closed again before you woke. You can find the line of it, third vertebra to the small of the back, as a raised seam under a crust that lifts off the sheet in one long piece, like the skin off a scald."),
-            ("n", "Under the seam there are plates. Smooth, warm, faintly ridged, and when you breathe in they move, in sequence, from the top down."),
+            ("n", "You make an inventory because inventories are safer than conclusions: the hour, the wet sheet, the smell, the line of something raised beneath your shirt. You leave out the feeling that came with waking — not pain, exactly, but the shameful relief of finding an explanation, any explanation, for the pressure you have carried all week."),
+            ("n", "Something along your spine has opened in the night and closed again before you woke. You can find the line of it, third vertebra to the small of the back, beneath a dry ridge that has marked the sheet with a neatness almost like handwriting."),
+            ("n", "Under the ridge are plates. Smooth, warm, faintly ridged; when you breathe in, they move in sequence from the top down. You hold your breath to see whether they will stop. They do. You breathe again, and they begin before you do."),
             ("!", "You cannot see it. It is on your back. There is no mirror in this flat that will show you, and there is exactly one person in this city you could ask to look."),
             ("n", "You sit on the edge of the bed for some time holding a handful of your own bedsheet. Then, alone in a locked room in a city that hears everything, you say his name out loud, to test something."),
             ("!", "Harthur."),
-            ("n", "The r comes out with a buzz riding underneath it. A second voice, half a tone down, arriving a fraction late, the way an echo arrives — except that there is nothing in this room to echo off."),
+            ("n", "The r comes out with a buzz underneath it. A second voice, half a tone down, arrives a fraction late. It is not quite an echo; it sounds more like a witness waiting for you to finish before correcting your account."),
             ("n", "The voice goes first. Nobody ever told you that, and yet you know it, the way you know to pull your hand out of a fire."),
-            ("n", "And you think about schedule nine, page two, sixty-one entries; and about a thimble a week since you were seventeen; and about the fact that both available explanations are now standing in the room at the same time, and you cannot get rid of either one:"),
+            ("n", "You begin making the case for both explanations. The Draught, taken weekly since you were seventeen; Schedule Nine, page two, sixty-one entries. You arrange the facts so each side can acquit you, then notice you have not asked what you are trying to be acquitted of."),
             ("!", "Either there is a thing on Ashmoor Row and it is happening to you as well — or the Draught has finally done to you what the Draught does, and there is nothing on Ashmoor Row at all, and there never was."),
         ],
         "choices": [
@@ -1128,9 +1140,9 @@ SCENES = {
         "text": [
             ("n", "You do not make the river. You do not, in the end, particularly try."),
             ("n", "It takes eleven days to stop putting the face on, and they are the worst eleven days of your life, and he does not leave the water once in the whole of them."),
-            ("n", "On the fourth day the voice goes entirely. On the seventh the seam opens the rest of the way down and does not close, and what comes out of you over the following hour is more than you would have believed a body could contain and still have opinions afterward."),
+            ("n", "On the fourth day the voice goes entirely. You keep forming words in your mind, as if the right sentence could call it back. On the seventh the seam opens the rest of the way down and does not close. For an hour your body follows a logic you cannot translate, while you keep trying to decide whether the fear belongs to you or to the part of you that is leaving."),
             ("n", "He holds your head out of the black water for most of it. He does not tell you that it will be all right; he has never lied to you and he is not going to take it up at the end. What he says, over and over, in a voice that is by then not using a mouth, is that he is here, and that he is not going anywhere, and that he has got you."),
-            ("n", "On the eleventh day you stop, and let go, and go down into the older patient shape — and the relief is so total, so far beyond anything the word relief was ever built to carry, that if there were any part of you left that could weep you would still be doing it now."),
+            ("n", "On the eleventh day you stop trying to negotiate with it. You let go and go down into the older, patient shape. The relief is so total that you cannot tell whether you have been rescued or have simply stopped being able to object."),
             ("n", "There are more of you down here than the Ordinance would survive knowing. Four hundred and seven names came off the books over two decades, and a fair number of them came down these stairs and simply went on existing, out of spite and warm water."),
             ("n", "You are not a person any more, in the sense that the ledger means person. You are not certain you ever met the standard."),
             ("!", "What you are is with him, which turns out to have been the load-bearing part."),
@@ -1228,6 +1240,7 @@ SCENES = {
         "text": [
             ("n", "You do not get three streets."),
             ("n", "It is not the wardens. It is the stairs, and then the wall beside the stairs, and then the discovery — sudden, total, delivered by your own body without consultation — that the wall is easier."),
+            ("n", "The thought arrives already defended: the wall is nearer, the ceiling is quiet, the floor has asked too much of you. You know these are symptoms. You also know how convincingly a person can reason toward the thing they have already begun to do."),
             ("n", "They find you on the ceiling of the second landing and they are very calm about it, because there is a procedure, and the procedure is old, and it was written by people who knew exactly how hunters end."),
             ("doc", "DISPOSAL ORDER — INTERNAL\nSUBJECT: Third Nail, Ashmoor beat\nCAUSE: Draught, cumulative. Expected.\nMETHOD: hold to conclusion. Do not intervene.\nNOTE: allocate replacement from the Nail School intake.\nThey come up quickly."),
             ("n", "They put you in a cell with a drain and they do not touch you and they do not question you, because there is nothing you know that they have not known since before you were born, and it is not that kind of institution anyway. It is a tidy one."),
@@ -1307,6 +1320,148 @@ st.markdown(
     <style>
       .stApp { background: #0f0e12; }
       .main .block-container { max-width: 760px; padding-top: 2.2rem; }
+      .stApp:has(.qh-start-hero) {
+          background:
+              radial-gradient(ellipse at 50% 0%, rgba(91, 67, 54, .23), transparent 48%),
+              linear-gradient(180deg, #171612 0%, #111114 46%, #0d0d10 100%);
+      }
+      .main .block-container:has(.qh-start-hero) {
+          max-width: 900px;
+          padding-top: 3.5rem;
+          padding-bottom: 4rem;
+      }
+      .qh-start-hero {
+          position: relative;
+          padding: 1.25rem 0 2rem;
+          margin-bottom: 1.25rem;
+          border-bottom: 1px solid rgba(190, 157, 106, .28);
+          animation: qh-arrive .9s ease-out both;
+      }
+      .qh-start-hero:after {
+          content: "";
+          display: block;
+          width: 3.5rem;
+          height: 2px;
+          margin-top: 1.3rem;
+          background: #a33f35;
+          box-shadow: 0 0 18px rgba(163, 63, 53, .65);
+      }
+      .qh-start-kicker, .qh-paper-label {
+          font-family: ui-monospace, "SF Mono", monospace;
+          font-size: .68rem;
+          letter-spacing: .2em;
+          line-height: 1.5;
+          text-transform: uppercase;
+      }
+      .qh-start-kicker { color: #b28d5c; margin-bottom: .8rem; }
+      .qh-start-hero h1 {
+          font-family: Georgia, "Iowan Old Style", serif;
+          font-size: clamp(3.1rem, 5vw, 4.8rem);
+          font-weight: 400;
+          line-height: 1;
+          color: #e8dfce;
+          margin: 0;
+      }
+      .qh-start-subtitle {
+          max-width: 38rem;
+          margin: 1rem 0 0;
+          color: #aaa297;
+          font-family: Georgia, "Iowan Old Style", serif;
+          font-size: 1.08rem;
+          line-height: 1.65;
+      }
+      .qh-start-stamp {
+          margin-top: 1.1rem;
+          color: #a65549;
+          font: .66rem/1.5 ui-monospace, "SF Mono", monospace;
+          letter-spacing: .13em;
+          text-transform: uppercase;
+      }
+      .qh-paper {
+          position: relative;
+          color: #332d23;
+          background-color: #d6c7a7;
+          background-image:
+              repeating-linear-gradient(0deg, rgba(70, 53, 31, .035) 0, rgba(70, 53, 31, .035) 1px, transparent 1px, transparent 4px),
+              radial-gradient(ellipse at 8% 12%, rgba(255, 247, 216, .55), transparent 48%),
+              radial-gradient(ellipse at 93% 82%, rgba(96, 65, 34, .16), transparent 52%);
+          border: 1px solid rgba(214, 192, 151, .55);
+          box-shadow: 0 12px 34px rgba(0, 0, 0, .27), inset 0 0 28px rgba(94, 68, 39, .12);
+          padding: 1.35rem 1.55rem;
+          margin: 0 0 1.1rem;
+          animation: qh-arrive .7s ease-out both;
+      }
+      .qh-paper:nth-of-type(2) { animation-delay: .08s; }
+      .qh-paper:nth-of-type(3) { animation-delay: .16s; }
+      .qh-paper:nth-of-type(4) { animation-delay: .24s; }
+      .qh-paper-label { color: #795c39; margin: 0 0 .7rem; }
+      .qh-paper p, .qh-paper .qh-brief p {
+          color: #393329;
+          font-family: Georgia, "Iowan Old Style", serif;
+          font-size: .98rem;
+          line-height: 1.72;
+      }
+      .qh-paper p:last-child { margin-bottom: 0; }
+      .qh-paper b { color: #201d18; }
+      .qh-paper table {
+          display: block;
+          width: 100%;
+          overflow-x: auto;
+          border-collapse: collapse;
+          color: #393329;
+          font: .78rem/1.55 Georgia, "Iowan Old Style", serif;
+      }
+      .qh-paper th, .qh-paper td {
+          padding: .55rem .6rem;
+          border-bottom: 1px solid rgba(90, 68, 40, .24);
+          text-align: left;
+          vertical-align: top;
+      }
+      .qh-paper th {
+          color: #795c39;
+          font: .62rem/1.4 ui-monospace, "SF Mono", monospace;
+          letter-spacing: .08em;
+          text-transform: uppercase;
+      }
+      .qh-opening-copy {
+          color: #393329;
+          font: .98rem/1.75 Georgia, "Iowan Old Style", serif;
+          margin: 0 0 .85rem;
+      }
+      .qh-opening-doc {
+          color: #574933;
+          border-top: 1px solid rgba(90, 68, 40, .35);
+          padding-top: .85rem;
+          margin: 1rem 0 0;
+          white-space: pre-wrap;
+          font: .76rem/1.8 ui-monospace, "SF Mono", monospace;
+      }
+      .main .block-container:has(.qh-start-hero) .qh-brief-h { display: none; }
+      .main .block-container:has(.qh-start-hero) .qh-rule { border-color: rgba(190, 157, 106, .28); }
+      .main .block-container:has(.qh-start-hero) [data-testid="stCaption"] { color: #827d74; }
+      .main .block-container:has(.qh-start-hero) .stTextInput label { color: #c4b9a5; }
+      .main .block-container:has(.qh-start-hero) .stButton > button {
+          border-color: #8d392f;
+          background: #742e28;
+          color: #f1e6d2;
+      }
+      .main .block-container:has(.qh-start-hero) .stButton > button:hover {
+          border-color: #b05a47;
+          background: #8b382e;
+          color: #fff4df;
+      }
+      @keyframes qh-arrive {
+          from { opacity: 0; transform: translateY(9px); }
+          to { opacity: 1; transform: translateY(0); }
+      }
+      @media (prefers-reduced-motion: reduce) {
+          .qh-start-hero, .qh-paper { animation: none; }
+      }
+      @media (max-width: 640px) {
+          .main .block-container:has(.qh-start-hero) { padding-top: 2rem; }
+          .qh-start-hero h1 { font-size: 3.1rem; }
+          .qh-paper { padding: 1.1rem; }
+      }
       .qh-act {
           font-family: ui-monospace, "SF Mono", monospace;
           letter-spacing: .28em; text-transform: uppercase;
@@ -1357,11 +1512,87 @@ st.markdown(
       }
       .qh-end .qh-act { margin: 0; }
       .qh-rule { border: 0; border-top: 1px solid #262330; margin: 1.8rem 0; }
+      .qh-page {
+          min-height: 260px;
+          display: flex; flex-direction: column; justify-content: center;
+      }
+      .qh-page > *:last-child { margin-bottom: 0 !important; }
+      .qh-pagemark {
+          font-family: ui-monospace, "SF Mono", monospace;
+          letter-spacing: .22em; font-size: .68rem; color: #5f5869;
+          text-align: right; margin: 0 0 .1rem 0;
+      }
+      @media (max-width: 640px) {
+          .qh-page { min-height: 190px; }
+      }
       .qh-jnote {
           font-family: Georgia, serif; font-size: .96rem; line-height: 1.72;
           color: #c3b9ab; font-style: italic;
           border-left: 2px solid #4a3f2c; padding-left: .95rem;
           margin: .65rem 0 .15rem 0;
+      }
+      .qh-notebook-page {
+          position: relative;
+          min-height: 410px;
+          padding: 1.55rem 1.25rem 2.8rem 2.8rem;
+          margin: .7rem 0 1rem;
+          color: #382f26;
+          border: 1px solid #b7a987;
+          background-color: #e4dac2;
+          background-image:
+              linear-gradient(90deg, transparent 0, transparent 2.75rem, rgba(151, 57, 46, .4) 2.78rem, rgba(151, 57, 46, .4) 2.83rem, transparent 2.86rem),
+              repeating-linear-gradient(180deg, transparent 0, transparent 30px, rgba(80, 111, 122, .19) 31px, transparent 32px),
+              radial-gradient(ellipse at 14% 8%, rgba(255, 251, 225, .62), transparent 56%),
+              radial-gradient(ellipse at 92% 91%, rgba(96, 65, 34, .14), transparent 52%);
+          box-shadow: 0 12px 34px rgba(0, 0, 0, .32), inset 0 0 30px rgba(94, 68, 39, .1);
+      }
+      .qh-notebook-left {
+          border-right: 0;
+          box-shadow: 0 12px 34px rgba(0, 0, 0, .32), inset -12px 0 18px -18px rgba(45, 35, 27, .8), inset 0 0 30px rgba(94, 68, 39, .1);
+      }
+      .qh-notebook-right {
+          border-left: 1px solid #aa9b7d;
+          box-shadow: 0 12px 34px rgba(0, 0, 0, .32), inset 12px 0 18px -18px rgba(45, 35, 27, .8), inset 0 0 30px rgba(94, 68, 39, .1);
+      }
+      .qh-notebook-kicker {
+          color: #805239;
+          font: .64rem/1.5 ui-monospace, "SF Mono", monospace;
+          letter-spacing: .17em;
+          text-transform: uppercase;
+          margin-bottom: .35rem;
+      }
+      .qh-notebook-page h2 {
+          color: #302820;
+          font: 400 1.8rem/1.2 Georgia, "Iowan Old Style", serif;
+          margin: 0 0 1.1rem;
+      }
+      .qh-notebook-official {
+          color: #484034;
+          font: .76rem/2 ui-monospace, "SF Mono", monospace;
+          white-space: pre-wrap;
+          margin: 0 0 1.4rem;
+      }
+      .qh-notebook-note {
+          color: #702d28;
+          font: italic .91rem/1.8 Georgia, "Iowan Old Style", serif;
+          margin: 0;
+      }
+      .qh-notebook-empty-copy {
+          margin-top: 5rem;
+          color: #81745d;
+          font: italic .95rem/1.8 Georgia, "Iowan Old Style", serif;
+          text-align: center;
+      }
+      .qh-notebook-page-no {
+          position: absolute;
+          right: 1.2rem;
+          bottom: .7rem;
+          color: #806f55;
+          font: .65rem ui-monospace, "SF Mono", monospace;
+      }
+      @media (max-width: 640px) {
+          .qh-notebook-page { min-height: 360px; padding: 1.4rem .9rem 2.5rem 2.2rem; }
+          .qh-notebook-page h2 { font-size: 1.35rem; }
       }
       .qh-brief-h {
           font-family: Georgia, serif; font-size: 1.15rem; color: #e8dcc0;
@@ -1372,6 +1603,7 @@ st.markdown(
           color: #bdb5ab; margin: 0 0 .75rem 0;
       }
       .qh-brief b { color: #ded5c7; font-weight: 600; }
+      .qh-paper .qh-brief b { color: #7d2925; font-weight: 700; }
       .qh-jcat {
           font-family: ui-monospace, monospace; font-size: .7rem;
           letter-spacing: .22em; text-transform: uppercase;
@@ -1393,28 +1625,96 @@ def personalize(body):
     return body.replace("{name}", full).replace("{first}", full.split()[0])
 
 
+def block_html(kind, body):
+    body = personalize(body)
+    if kind == "n":
+        return f'<p class="qh-n">{body}</p>'
+    if kind == "!":
+        return f'<div class="qh-beat">{body}</div>'
+    if kind == "doc":
+        return f'<div class="qh-doc">{body}</div>'
+    speaker = st.session_state.name if kind == "you" else kind
+    return (
+        f'<div class="qh-line"><div class="qh-speaker">{speaker}</div>'
+        f"<p>{body}</p></div>"
+    )
+
+
 def render_blocks(blocks):
     for kind, body in blocks:
-        body = personalize(body)
-        if kind == "n":
-            st.markdown(f'<p class="qh-n">{body}</p>', unsafe_allow_html=True)
-        elif kind == "!":
-            st.markdown(f'<div class="qh-beat">{body}</div>', unsafe_allow_html=True)
-        elif kind == "doc":
-            st.markdown(f'<div class="qh-doc">{body}</div>', unsafe_allow_html=True)
-        else:
-            speaker = st.session_state.name if kind == "you" else kind
-            st.markdown(
-                f'<div class="qh-line"><div class="qh-speaker">{speaker}</div>'
-                f"<p>{body}</p></div>",
-                unsafe_allow_html=True,
-            )
+        st.markdown(block_html(kind, body), unsafe_allow_html=True)
+
+
+# --------------------------------------------------------------------------
+# PAGE TURNING
+# A night is read one paragraph at a time. The consequence of the last choice
+# is the front matter of the scene it led to, so it pages first.
+# --------------------------------------------------------------------------
+def scene_pages(scene):
+    pages = []
+    if st.session_state.log and scene.get("kind") != "ending":
+        pages.extend(st.session_state.log[-1][2])
+    pages.extend(scene.get("text", []))
+    return pages
+
+
+def current_page(pages):
+    """Clamp the turn into range and return it. Guards a mid-scene reload."""
+    if not pages:
+        st.session_state.page = 0
+        return 0
+    turn = max(0, min(st.session_state.page, len(pages) - 1))
+    st.session_state.page = turn
+    return turn
+
+
+def render_page(pages, turn):
+    if not pages:
+        return
+    kind, body = pages[turn]
+    st.markdown(
+        f'<div class="qh-pagemark">{turn + 1:02d} / {len(pages):02d}</div>'
+        f'<div class="qh-page">{block_html(kind, body)}</div>',
+        unsafe_allow_html=True,
+    )
+
+
+def turn_page(delta):
+    st.session_state.page += delta
+    st.rerun()
+
+
+def render_next_button(label="Next"):
+    """The page turn. Sits where the choices will eventually sit."""
+    back, fwd = st.columns([1, 3])
+    with back:
+        if st.button(
+            "Back",
+            key=f"back_{st.session_state.scene}_{st.session_state.page}",
+            use_container_width=True,
+            disabled=st.session_state.page == 0,
+        ):
+            turn_page(-1)
+    with fwd:
+        if st.button(
+            label,
+            key=f"next_{st.session_state.scene}_{st.session_state.page}",
+            type="primary",
+            use_container_width=True,
+        ):
+            turn_page(1)
 
 
 @st.dialog("The Journal", width="large")
 def show_journal():
     have = st.session_state.journal
     new = st.session_state.journal_show_new
+    entries = [
+        (key, entry)
+        for category in JOURNAL_CATS
+        for key, entry in JOURNAL.items()
+        if entry["cat"] == category and key in have
+    ]
     st.caption(
         f"{len(have)} of {len(JOURNAL)} entries recovered. The Ordinance's text "
         "as the Ordinance gives it. The rest is yours."
@@ -1422,29 +1722,70 @@ def show_journal():
     if not have:
         st.info("Nothing yet. It fills as you go.")
         return
-    for cat in JOURNAL_CATS:
-        keys = [k for k, v in JOURNAL.items() if v["cat"] == cat]
-        got = [k for k in keys if k in have]
-        if not got:
-            continue
-        st.markdown(f'<div class="qh-jcat">{cat}</div>', unsafe_allow_html=True)
-        for key in got:
-            entry = JOURNAL[key]
-            title = entry["term"] + ("  ·  new" if key in new else "")
-            with st.expander(title, expanded=key in new):
+    page_count = len(entries)
+    last_spread = ((page_count - 1) // 2) * 2
+    spread = min((st.session_state.journal_page // 2) * 2, last_spread)
+    st.session_state.journal_page = spread
+    left_page, right_page = st.columns(2, gap="small")
+    for offset, column in enumerate((left_page, right_page)):
+        with column:
+            page = spread + offset
+            if page < page_count:
+                key, entry = entries[page]
+                new_mark = "  ·  NEW" if key in new else ""
+                side = "left" if offset == 0 else "right"
                 st.markdown(
-                    f'<div class="qh-doc">{entry["official"]}</div>',
+                    f'<article class="qh-notebook-page qh-notebook-{side}">'
+                    f'<div class="qh-notebook-kicker">{entry["cat"]}{new_mark}</div>'
+                    f'<h2>{entry["term"]}</h2>'
+                    f'<div class="qh-notebook-official">{entry["official"]}</div>'
+                    f'<p class="qh-notebook-note">{entry["note"]}</p>'
+                    f'<div class="qh-notebook-page-no">{page + 1:02d} / {page_count:02d}</div>'
+                    '</article>',
                     unsafe_allow_html=True,
                 )
+            else:
                 st.markdown(
-                    f'<p class="qh-jnote">{entry["note"]}</p>', unsafe_allow_html=True
+                    '<article class="qh-notebook-page qh-notebook-right">'
+                    '<div class="qh-notebook-kicker">Unwritten leaf</div>'
+                    '<p class="qh-notebook-empty-copy">No further entry has been recovered.</p>'
+                    '</article>',
+                    unsafe_allow_html=True,
                 )
-        missing = len(keys) - len(got)
-        if missing:
-            st.caption(
-                f"{missing} further entr{'y' if missing == 1 else 'ies'} "
-                "under this heading, not yet recovered."
-            )
+    previous, counter, next_page = st.columns([1, 1, 1])
+    with previous:
+        st.button(
+            "‹ Previous spread",
+            key="journal_previous_spread",
+            disabled=spread == 0,
+            on_click=turn_journal_spread,
+            args=(-1,),
+            use_container_width=True,
+        )
+    with counter:
+        spread_count = (page_count + 1) // 2
+        st.markdown(
+            f'<div class="qh-jcat" style="text-align:center;margin-top:.7rem">'
+            f'Spread {spread // 2 + 1} of {spread_count}</div>',
+            unsafe_allow_html=True,
+        )
+    with next_page:
+        st.button(
+            "Next spread ›",
+            key="journal_next_spread",
+            disabled=spread >= last_spread,
+            on_click=turn_journal_spread,
+            args=(1,),
+            use_container_width=True,
+        )
+
+
+def turn_journal_spread(direction):
+    entry_count = sum(key in st.session_state.journal for key in JOURNAL)
+    last_spread = ((entry_count - 1) // 2) * 2
+    st.session_state.journal_page = min(
+        max(st.session_state.journal_page + direction * 2, 0), last_spread
+    )
 
 
 def journal_button(slot, use_container_width=True):
@@ -1460,6 +1801,7 @@ def journal_button(slot, use_container_width=True):
         # while the dialog is open.
         st.session_state.journal_show_new = set(st.session_state.journal_new)
         st.session_state.journal_new.clear()
+        st.session_state.journal_page = 0
         show_journal()
 
 
@@ -1472,6 +1814,17 @@ def band_for(stat, value):
 
 
 def take_choice(choice):
+    scene = SCENES[st.session_state.scene]
+    st.session_state.decision_checkpoints.append(
+        {
+            "scene": st.session_state.scene,
+            "scene_title": scene["title"],
+            "choice": choice["label"],
+            "stats": dict(st.session_state.stats),
+            "flags": set(st.session_state.flags),
+            "log": list(st.session_state.log),
+        }
+    )
     for stat, delta in choice.get("effects", {}).items():
         st.session_state.stats[stat] += delta
     for flag in choice.get("flags", []):
@@ -1481,6 +1834,20 @@ def take_choice(choice):
     )
     nxt = choice["next"]
     st.session_state.scene = nxt() if callable(nxt) else nxt
+    st.session_state.page = 0
+    st.rerun()
+
+
+def restore_decision_checkpoint(index):
+    checkpoint = st.session_state.decision_checkpoints[index]
+    st.session_state.scene = checkpoint["scene"]
+    st.session_state.stats = dict(checkpoint["stats"])
+    st.session_state.flags = set(checkpoint["flags"])
+    st.session_state.log = list(checkpoint["log"])
+    st.session_state.decision_checkpoints = st.session_state.decision_checkpoints[:index]
+    st.session_state.page = 0
+    if "decision_checkpoint_select" in st.session_state:
+        del st.session_state["decision_checkpoint_select"]
     st.rerun()
 
 
@@ -1518,6 +1885,26 @@ with st.sidebar:
                 for i, (title, label, _) in enumerate(st.session_state.log, 1):
                     st.markdown(f"**{i}. {title}** — {label}")
 
+        checkpoints = st.session_state.decision_checkpoints
+        if checkpoints:
+            with st.expander("Restore an earlier decision"):
+                selected_checkpoint = st.selectbox(
+                    "Return to before:",
+                    options=range(len(checkpoints)),
+                    index=len(checkpoints) - 1,
+                    format_func=lambda index: (
+                        f"{index + 1}. {checkpoints[index]['scene_title']} — "
+                        f"{checkpoints[index]['choice']}"
+                    ),
+                    key="decision_checkpoint_select",
+                )
+                if st.button(
+                    "Restore decision",
+                    key="restore_decision_checkpoint",
+                    use_container_width=True,
+                ):
+                    restore_decision_checkpoint(selected_checkpoint)
+
         st.divider()
 
     found = st.session_state.endings_found
@@ -1545,7 +1932,9 @@ with st.sidebar:
             "fact, the Quiet Room, the colleague informed on by his own wife) "
             "and Franz Kafka's **The Metamorphosis** (the voice going first, "
             "the morning the body stops being yours, the iron grown over in a "
-            "back that cannot reach it, and the sweeping-out afterward)."
+            "back that cannot reach it, and the sweeping-out afterward). The "
+            "self-cross-examining narration also owes a thematic debt to Fyodor "
+            "Dostoevsky's **Notes from Underground**."
         )
 
 
@@ -1598,22 +1987,22 @@ METERS = [
 # Door -> (ending title, what it needs). Order matches the resolvers.
 ROUTES = {
     "Open the door": [
-        ("No Such Man", "Prove is **Nothing at all** — checked before anything else, on every door."),
-        ("Verminous", "Body at **Disposable**. You have turned too far to be arrested."),
-        ("The Hunter's Mercy", "You drew your iron on him on Night Four, **or** Harthur never got past *He is paying attention*."),
-        ("The Quiet Room", "Anything else. He is taken, and they only want one word out of you."),
+        ("No Such Man", "With nothing physical to prove, the Ordinance decides Harthur was a Draught hallucination. They take your lamp, taper you off the drug, and send you to recover in a ward; you are left unsure whether he was real. **Condition:** You never find evidence stronger than what only your own eyes can tell you. This overrides every other ending on any route."),
+        ("Verminous", "The Draught's effects overtake your body. The Ordinance confines you and waits for the transformation to finish, then records your disposal as routine. Harthur is left behind, still waiting for you. **Condition:** Your body reaches **Disposable**."),
+        ("The Hunter's Mercy", "You kill Harthur yourself to spare him the Quiet Room. The Ordinance praises and promotes you, but soon you discover the iron is growing into your own back. **Condition:** You drew your iron on Night Four, **or** Harthur's attachment never rose above *He is paying attention*."),
+        ("The Quiet Room", "Harthur is taken alive, and under pressure you call him a monster. The Ordinance rewards your testimony with a commendation and a new district; you keep your post, but the grief stays with you. **Condition:** None of the earlier Open the door conditions apply."),
     ],
     "Run to the Mire": [
-        ("No Such Man", "Prove is **Nothing at all**."),
-        ("Two Bodies, One Ledger", "Body at **Disposable** *and* Harthur at **He is keeping you**. You both turn, and he reaches you in the water."),
-        ("Verminous", "Body at **Disposable** without him. Same transformation, nobody there for it."),
-        ("The Amended Name", "Harthur well past **He is keeping you**, Pull past **You keep going back**, and your body still short of Disposable."),
-        ("A Clean Report", "Anything else. You stop on the third step and let him go alone."),
+        ("No Such Man", "With nothing physical to prove, the Ordinance decides Harthur was a Draught hallucination. They take your lamp, taper you off the drug, and send you to recover in a ward; you are left unsure whether he was real. **Condition:** You never find evidence stronger than what only your own eyes can tell you. This overrides every other ending on any route."),
+        ("Two Bodies, One Ledger", "You stop running and let the change finish. Harthur stays beside you through the transformation, and together you join the hidden lives beneath the city, beyond the Registry's definition of personhood. **Condition:** Your body reaches **Disposable** and Harthur's attachment reaches **He is keeping you**."),
+        ("Verminous", "You reach the Mire without Harthur. The Draught's effects overtake your body, and the Ordinance confines you until the transformation is complete; Harthur remains behind, waiting with two cups. **Condition:** Your body reaches **Disposable**, but Harthur has not reached **He is keeping you**."),
+        ("The Amended Name", "Harthur erases both your names from the Registry. In the Mire, you choose to let him set aside his human face, and the two of you disappear from the Ordinance's records together. **Condition:** Harthur is keeping you, the Pull has reached **You keep going back**, and your body is still short of **Disposable**."),
+        ("A Clean Report", "You stop on the third step and let Harthur go alone. You keep your post and your life, but the change in your body continues in private, and you carry the loss back to the Ashmoor beat. **Condition:** None of the earlier Run to the Mire conditions apply."),
     ],
     "Burn the Registry": [
-        ("No Such Man", "Prove is **Nothing at all**."),
-        ("Both Names Struck", "Harthur at **He is keeping you**. You burn it together and go with it."),
-        ("Ash and Nothing", "Anything else. You burn it alone, and they had copies."),
+        ("No Such Man", "With nothing physical to prove, the Ordinance decides Harthur was a Draught hallucination. They take your lamp, taper you off the drug, and send you to recover in a ward; you are left unsure whether he was real. **Condition:** You never find evidence stronger than what only your own eyes can tell you. This overrides every other ending on any route."),
+        ("Both Names Struck", "You and Harthur burn the Registry together. You die in the fire, but the city's central record is gone, leaving the Ordinance unable to prove who belongs in it. **Condition:** Harthur's attachment has reached **He is keeping you**."),
+        ("Ash and Nothing", "You burn the Registry alone, but its nightly duplicates survive and the Ordinance rebuilds the records. You are taken, and Harthur is captured; the 406 people he erased remain untraceable, while the new ledger writes your names together. **Condition:** Harthur has not yet reached **He is keeping you**."),
     ],
 }
 
@@ -1622,33 +2011,50 @@ ROUTES = {
 # TITLE SCREEN
 # ----------------------------------------------------------------------------
 if not st.session_state.started:
-    st.markdown('<div class="qh-act">The City of Vantage</div>', unsafe_allow_html=True)
-    st.markdown('<h1 class="qh-title">Quiet Hours</h1>', unsafe_allow_html=True)
-    render_blocks([
-        ("n", "There is a book in this city with ninety thousand names in it, and the book decides which of them are people."),
-        ("n", "You carry a nail for the ones it decides against. There is a queue outside the Ordinance house every morning of people who have come to help you. There is chalk going up on doors that nobody official chalked. On Marrow Street this afternoon a woman lifted her boy onto her shoulders so that he could see over the hats."),
-        ("doc", "THE ORDINANCE OF QUIET HOURS\nA MONSTER IS A THING THE LEDGER HAS NOT YET NAMED.\nMERCY IS MURDER, DEFERRED.\nYOU ARE NOT BEING WATCHED. YOU ARE BEING KEPT."),
-    ])
+    st.markdown(
+        '<div class="qh-title-screen">'
+        '<header class="qh-start-hero">'
+        '<div class="qh-start-kicker">Vantage City // Incident File 44-118-C</div>'
+        '<h1>Quiet Hours</h1>'
+        '<p class="qh-start-subtitle">A horror romance in six nights. The Registry decides who is a person. You have been sent to correct its mistake.</p>'
+        '<div class="qh-start-stamp">Third Nail // Ashmoor Beat // Case Open</div>'
+        '</header>'
+        '<section class="qh-paper">'
+        '<div class="qh-paper-label">A notice from the Ordinance</div>'
+        '<p class="qh-opening-copy">There is a book in this city with ninety thousand names in it, and the book decides which of them are people.</p>'
+        '<p class="qh-opening-copy">You carry a nail for the ones it decides against. There is a queue outside the Ordinance house every morning of people who have come to help you. There is chalk going up on doors that nobody official chalked. On Marrow Street this afternoon a woman lifted her boy onto her shoulders so that he could see over the hats.</p>'
+        '<div class="qh-opening-doc">THE ORDINANCE OF QUIET HOURS\nA MONSTER IS A THING THE LEDGER HAS NOT YET NAMED.\nMERCY IS MURDER, DEFERRED.\nYOU ARE NOT BEING WATCHED. YOU ARE BEING KEPT.</div>'
+        '</section>',
+        unsafe_allow_html=True,
+    )
     st.markdown('<hr class="qh-rule">', unsafe_allow_html=True)
 
     # --- the same thing again, in plain words -------------------------------
-    st.markdown('<div class="qh-act">Before you begin</div>', unsafe_allow_html=True)
     w, c = st.columns(2)
     with w:
-        st.markdown('<div class="qh-brief-h">The world</div>', unsafe_allow_html=True)
-        st.markdown(f'<div class="qh-brief">{THE_WORLD}</div>', unsafe_allow_html=True)
+        st.markdown(
+            f'<section class="qh-paper"><div class="qh-paper-label">The world</div>'
+            f'<div class="qh-brief">{THE_WORLD}</div></section>',
+            unsafe_allow_html=True,
+        )
     with c:
-        st.markdown('<div class="qh-brief-h">The two characters</div>', unsafe_allow_html=True)
-        st.markdown(f'<div class="qh-brief">{THE_CHARACTERS}</div>', unsafe_allow_html=True)
+        st.markdown(
+            f'<section class="qh-paper"><div class="qh-paper-label">The two characters</div>'
+            f'<div class="qh-brief">{THE_CHARACTERS}</div></section>',
+            unsafe_allow_html=True,
+        )
 
-    st.markdown('<div class="qh-brief-h">The trap</div>', unsafe_allow_html=True)
-    st.markdown(f'<div class="qh-brief">{THE_TRAP}</div>', unsafe_allow_html=True)
+    st.markdown(
+        f'<section class="qh-paper"><div class="qh-paper-label">The trap</div>'
+        f'<div class="qh-brief">{THE_TRAP}</div></section>',
+        unsafe_allow_html=True,
+    )
 
     with st.expander("🔒  Routes explained  —  spoilers"):
         st.caption(
             "Nine endings. Night Six asks you to pick one of three doors; the "
-            "five meters decide which room is behind it. The meters never show "
-            "you numbers, so these are written in the words the sidebar uses."
+            "five meters decide which room is behind it. Each entry summarizes "
+            "what happens and gives the condition that leads to it."
         )
         for tab, (door, rows) in zip(st.tabs(list(ROUTES)), ROUTES.items()):
             with tab:
@@ -1666,10 +2072,12 @@ if not st.session_state.started:
             "ending you get."
         )
 
-    st.markdown('<div class="qh-brief-h">The five meters</div>', unsafe_allow_html=True)
     st.markdown(
-        "| Meter | What it tracks | Runs from | Up to |\n|---|---|---|---|\n"
-        + "\n".join(f"| **{n}** | {d} | *{lo}* | *{hi}* |" for n, d, lo, hi in METERS)
+        '<section class="qh-paper"><div class="qh-paper-label">The five meters</div>'
+        '<table><thead><tr><th>Meter</th><th>What it tracks</th><th>Runs from</th><th>Up to</th></tr></thead>'
+        f'<tbody>{"".join(f"<tr><td><strong>{name}</strong></td><td>{description}</td><td>{low}</td><td>{high}</td></tr>" for name, description, low, high in METERS)}</tbody></table>'
+        '</section>',
+        unsafe_allow_html=True,
     )
     st.caption("They sit in the sidebar the whole way through. Watch them.")
 
@@ -1699,8 +2107,14 @@ if scene.get("kind") == "ending":
         f'<h2 style="color:{color};">{scene["title"]}</h2></div>',
         unsafe_allow_html=True,
     )
-    render_blocks(scene["text"])
+    pages = scene_pages(scene)
+    turn = current_page(pages)
+    render_page(pages, turn)
     st.markdown('<hr class="qh-rule">', unsafe_allow_html=True)
+
+    if turn < len(pages) - 1:
+        render_next_button()
+        st.stop()
 
     s = st.session_state.stats
     lines = "\n".join(
@@ -1734,18 +2148,26 @@ _, jcol = st.columns([2, 1])
 with jcol:
     journal_button("scene")
 
-# The consequence of the previous choice opens the scene it led to.
-if st.session_state.log:
-    last_outcome = st.session_state.log[-1][2]
-    if last_outcome:
-        render_blocks(last_outcome)
-        st.markdown('<hr class="qh-rule">', unsafe_allow_html=True)
-
-render_blocks(scene["text"])
+# One paragraph to a page, the consequence of the last choice first.
+pages = scene_pages(scene)
+turn = current_page(pages)
+render_page(pages, turn)
 
 st.markdown('<hr class="qh-rule">', unsafe_allow_html=True)
 
-for i, choice in enumerate(scene["choices"]):
-    if st.button(choice["label"], key=f"{st.session_state.scene}_{i}", use_container_width=True):
-        take_choice(choice)
-    st.caption(choice["detail"])
+# The choices wait on the last page of the night.
+if turn < len(pages) - 1:
+    render_next_button()
+else:
+    for i, choice in enumerate(scene["choices"]):
+        if st.button(choice["label"], key=f"{st.session_state.scene}_{i}", use_container_width=True):
+            take_choice(choice)
+        st.caption(choice["detail"])
+    if len(pages) > 1:
+        st.markdown('<hr class="qh-rule">', unsafe_allow_html=True)
+        if st.button(
+            "Back",
+            key=f"back_{st.session_state.scene}_{turn}",
+            use_container_width=True,
+        ):
+            turn_page(-1)

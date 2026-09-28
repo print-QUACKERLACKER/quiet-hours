@@ -1650,12 +1650,48 @@ def render_blocks(blocks):
 # A night is read one paragraph at a time. The consequence of the last choice
 # is the front matter of the scene it led to, so it pages first.
 # --------------------------------------------------------------------------
-def scene_pages(scene):
+# A page holds a beat, not a paragraph. A punchline is short because it is a
+# punchline; put a click between it and its setup and the timing dies.
+PAGE_SHORT = 15        # a paragraph under this many words cannot open a page
+PAGE_MAX_WORDS = 95    # nor may a page grow past this
+PAGE_MAX_BLOCKS = 3
+
+
+def group_pages(blocks):
     pages = []
-    if st.session_state.log and scene.get("kind") != "ending":
-        pages.extend(st.session_state.log[-1][2])
-    pages.extend(scene.get("text", []))
+    force = False
+    for kind, body in blocks:
+        if kind == "break":           # an author-placed silence
+            force = True
+            continue
+        words = len(body.split())
+        page = pages[-1] if pages else None
+        held = sum(len(b.split()) for _, b in page) if page else 0
+        opens = (
+            page is None
+            or force
+            or len(page) >= PAGE_MAX_BLOCKS
+            or held + words > PAGE_MAX_WORDS
+            or (kind in ("n", "doc", "!") and words >= PAGE_SHORT)
+        )
+        # Never strand a one-line setup on a page with nothing to pay it off.
+        if opens and not force and page is not None and len(page) == 1 and held < PAGE_SHORT:
+            opens = False
+        if opens:
+            pages.append([(kind, body)])
+        else:
+            pages[-1].append((kind, body))
+        force = False
     return pages
+
+
+def scene_pages(scene):
+    blocks = []
+    if st.session_state.log and scene.get("kind") != "ending":
+        blocks.extend(st.session_state.log[-1][2])
+        blocks.append(("break", ""))   # the consequence closes before the night opens
+    blocks.extend(scene.get("text", []))
+    return group_pages(blocks)
 
 
 def current_page(pages):
@@ -1671,10 +1707,10 @@ def current_page(pages):
 def render_page(pages, turn):
     if not pages:
         return
-    kind, body = pages[turn]
+    held = "".join(block_html(kind, body) for kind, body in pages[turn])
     st.markdown(
         f'<div class="qh-pagemark">{turn + 1:02d} / {len(pages):02d}</div>'
-        f'<div class="qh-page">{block_html(kind, body)}</div>',
+        f'<div class="qh-page">{held}</div>',
         unsafe_allow_html=True,
     )
 

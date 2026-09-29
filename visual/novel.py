@@ -1,3 +1,6 @@
+import base64
+from pathlib import Path
+
 import streamlit as st
 
 st.set_page_config(page_title="Quiet Hours", page_icon="🕯️", layout="centered")
@@ -1491,7 +1494,15 @@ st.markdown(
       .qh-line {
           background: #171620; border: 1px solid #272433; border-radius: 3px;
           padding: .85rem 1.1rem; margin: 0 0 1.05rem 0;
+          display: flex; gap: .9rem; align-items: flex-start;
       }
+      .qh-face {
+          flex: 0 0 46px; width: 46px; height: 46px; border-radius: 2px;
+          object-fit: cover; object-position: 50% 22%;
+          border: 1px solid #272433;
+          filter: grayscale(1) brightness(.62) contrast(1.15);
+      }
+      .qh-said { flex: 1 1 auto; min-width: 0; }
       .qh-line p {
           font-family: Georgia, serif; font-size: 1.05rem; line-height: 1.65;
           color: #ddd5ea; margin: 0;
@@ -1625,6 +1636,30 @@ def personalize(body):
     return body.replace("{name}", full).replace("{first}", full.split()[0])
 
 
+# A speaking part gets a face. The player does not: the novel is written at
+# you, and a portrait of yourself would put a stranger in the second person.
+IMAGE_DIR = Path(__file__).resolve().parent.parent / "images"
+
+PORTRAITS = {
+    "Harthur": "harthur.png",
+    "Crow": "warden.png",
+    "Rell": "character.png",
+    "Mrs. Anselm": "anselm.png",
+    "Physician": "physician.png",
+}
+
+
+@st.cache_data(show_spinner=False)
+def portrait_uri(filename):
+    """Inline the portrait so it survives unsafe_allow_html. Missing art is
+    not worth an exception mid-scene; the line simply renders without a face."""
+    try:
+        raw = (IMAGE_DIR / filename).read_bytes()
+    except OSError:
+        return ""
+    return "data:image/png;base64," + base64.b64encode(raw).decode("ascii")
+
+
 def block_html(kind, body):
     body = personalize(body)
     if kind == "n":
@@ -1634,9 +1669,12 @@ def block_html(kind, body):
     if kind == "doc":
         return f'<div class="qh-doc">{body}</div>'
     speaker = st.session_state.name if kind == "you" else kind
+    uri = portrait_uri(PORTRAITS[kind]) if kind in PORTRAITS else ""
+    face = f'<img class="qh-face" src="{uri}" alt="">' if uri else ""
     return (
-        f'<div class="qh-line"><div class="qh-speaker">{speaker}</div>'
-        f"<p>{body}</p></div>"
+        f'<div class="qh-line">{face}'
+        f'<div class="qh-said"><div class="qh-speaker">{speaker}</div>'
+        f"<p>{body}</p></div></div>"
     )
 
 
